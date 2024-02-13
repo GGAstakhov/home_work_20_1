@@ -10,13 +10,11 @@ class Command(BaseCommand):
             {'name': 'computers and laptops', 'description': 'This section presents laptops, monitors and desktop computers'},
             {'name': 'TVs', 'description': 'This section presents TVs from large and well-known brands'},
         ]
-
+        # cleaning old files
         Category.objects.all().delete()
 
-        categories_for_create = []
-        for category_item in category_list:
-            categories_for_create.append(
-                Category(**category_item)
-            )
-
+        # Creating and saving new category objects
+        categories_for_create = [Category(**category) for category in category_list]
         Category.objects.bulk_create(categories_for_create)
+
+        self.stdout.write(self.style.SUCCESS('Данные успешно добавлены.'))
