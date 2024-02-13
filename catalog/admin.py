@@ -3,6 +3,7 @@ from django.contrib import admin
 from catalog.models import Product, Category
 
 
+# Product name in admin panel
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'price', 'category')
@@ -11,6 +12,7 @@ class ProductAdmin(admin.ModelAdmin):
     verbose_name_plural = 'Продукты'
 
 
+# Category name in admin panel
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
