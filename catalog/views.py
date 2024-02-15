@@ -19,7 +19,7 @@ def contacts(request):
         email = request.POST.get('email')
         message = request.POST.get('message')
         print(f'name: {name}, email: {email}, message: {message}')
-        return render(request, 'catalog/contacts.html')
+    return render(request, 'catalog/contacts.html')
 
 
 # Страница с продуктами по выбранным категориям
