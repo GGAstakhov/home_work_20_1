@@ -1,5 +1,5 @@
 {% extends 'catalog/base.html' %}
-{% load my_tags %}
+{% load static %}
 {% block content %}
 
 <div class="row text-center">
@@ -10,7 +10,7 @@
                 <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
             </div>
             <img class="card-img-top"
-                    src="{{ object.image|mymedia }}"
+                    src="{{ object.image|media }}"
                  alt="Card image cap">
             <div class="card-body">
                 <h1 class="card-title pricing-card-title">{{ object.price }} р.</h1>
