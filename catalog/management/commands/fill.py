@@ -5,10 +5,10 @@ from catalog.models import Category
 class Command(BaseCommand):
     def handle(self, *args, **options):
         category_list = [
-            {'name': 'smartphones and gadgets', 'description': 'This section presents various smartphones and gadgets'},
-            {'name': 'computer furniture', 'description': 'This section presents computer chairs and tables from famous brands'},
-            {'name': 'computers and laptops', 'description': 'This section presents laptops, monitors and desktop computers'},
-            {'name': 'TVs', 'description': 'This section presents TVs from large and well-known brands'},
+            {'name': 'Смартфоны, гаджеты', 'description': 'В этом разделе представлены различные смартфоны и гаджеты'},
+            {'name': 'Компьютерная мебель', 'description': 'В этом разделе представлены компьютерные кресла и столы известных брендов'},
+            {'name': 'Компьютеры, ноутбуки', 'description': 'В этом разделе представлены ноутбуки, мониторы и стационарные компьютеры'},
+            {'name': 'Телевизоры', 'description': 'В этом разделе представлены телевизоры крупных и известных брендов'},
         ]
 
         Category.objects.all().delete()
