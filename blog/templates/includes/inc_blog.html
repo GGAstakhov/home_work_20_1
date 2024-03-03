@@ -1,0 +1,21 @@
+{% load my_tags_blog %}
+
+<div class="col-md-4">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{ object.name|title }}</h4>
+        </div>
+        <div class="card-body">
+            <img class="card-img-top"
+                src="{{ object.preview|mymedia_blog }}"
+                alt="Card image cap">
+            <h1 class="card-title pricing-card-title">{{ price }}</h1>
+            <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                <li>- {{ object.content|slice:":100" }}</li>
+            </ul>
+            <div class="btn-group">
+              <a href="{% url 'blog:blog_view' object.slug %}" type="button" class="btn btn-lg btn-block btn-outline-primary">Просмотреть</a>
+            </div>
+        </div>
+    </div>
+</div>

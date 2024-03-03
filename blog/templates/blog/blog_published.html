@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<a href="{% url 'blog:blog_published' %}"
+   class="p-2 btn btn-outline-info col-lg-12 mb-4">Список опубликованных статей</a>
+<div class="row text-center">
+    <div class="col-12 mb-5">
+        <a href="{% url 'blog:create' %}" class="btn btn-primary">Создать новый блог</a>
+    </div>
+    {% for object in object_list %}
+        {% if object.published %}
+            {% include 'blog/includes/inc_blog.html' %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}
