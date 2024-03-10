@@ -1,4 +1,4 @@
-% extends 'blog/base.html' %}
+{% extends 'blog/base.html' %}
 {% load my_tags_blog %}
 {% block content %}
 
@@ -24,7 +24,7 @@
           </div>
             <div class="card-footer">
                 Просмотры: {{ object.count_views }}
-                <a class="btn btn-outline-dark" href="{% url 'blog:blog_update' object.pk %}">Изменить</a>
+                <a class="btn btn-outline-primary" href="{% url 'blog:blog_update' object.pk %}">Изменить</a>
                 <a class="btn btn-outline-danger float-right" href="{% url 'blog:blog_delete' object.pk %}">Удалить</a>
             </div>
             {% if object.published %}

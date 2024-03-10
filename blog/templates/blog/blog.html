@@ -8,7 +8,7 @@
         <a href="{% url 'blog:create' %}" class="btn btn-primary">Создать новый блог</a>
     </div>
     {% for object in object_list %}
-        {% include 'blog/includes/inc_blog.html' %}
+        {% include 'includes/inc_blog.html' %}
     {% endfor %}
 </div>
 
