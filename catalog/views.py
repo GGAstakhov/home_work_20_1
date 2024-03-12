@@ -1,15 +1,21 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView, ListView
 
 from catalog.models import Category, Product
 
 
-def start_form(request):
-    context = {
-        'object_list': Category.objects.all(),
+# Стартовая страница приложения Catalog
+class IndexView(TemplateView):
+    template_name = 'catalog/start_form.html'
+    extra_context = {
         'title': 'Склад товаров',
-        'view': 'Просмотр товаров',
+        'view': 'Просмотр товаров'
     }
-    return render(request, 'catalog/start_form.html', context)
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['object_list'] = Category.objects.all()
+        return context_data
 
 
 # Страница с контактными данными
@@ -19,14 +25,24 @@ def contacts(request):
         email = request.POST.get('email')
         message = request.POST.get('message')
         print(f'name: {name}, email: {email}, message: {message}')
-        return render(request, 'catalog/contacts.html')
+    return render(request, 'catalog/contacts.html')
 
 
 # Страница с продуктами по выбранным категориям
-def products(request, pk):
-    context = {
-        'object_list': Product.objects.filter(category=pk),
-        'title': 'Склад товаров',
-        'view': 'Купить товар',
-    }
-    return render(request, 'catalog/products.html', context)
+class ProductsListView(ListView):
+    model = Product
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(category_id=self.kwargs.get('pk'))
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context_data = super().get_context_data(*args, **kwargs)
+
+        category_item = Category.objects.get(pk=self.kwargs.get('pk'))
+        context_data['category_pk'] = category_item.pk
+        context_data['title'] = 'Склад товаров',
+        context_data['view'] = 'Купить товар'
+
+        return context_data
