@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 ### venv template
 # Virtualenv
+=======
+venv template
+Virtualenv
+>>>>>>> a01fef2 (some fixes)
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
 .Python
 [Bb]in
@@ -30,7 +35,11 @@ pip-selfcheck.json
 ### Example user template
 
 # IntelliJ project files
+<<<<<<< HEAD
 .idea
+=======
+home_work_20_1/.idea
+>>>>>>> a01fef2 (some fixes)
 *.iml
 out
 gen

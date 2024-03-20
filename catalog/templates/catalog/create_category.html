@@ -1,0 +1,17 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+  <div class="container">
+      <div class="text-center">
+        <h1 class="mb-5">Создание категории товара</h1>
+      </div>
+    <form method="post">
+      {% csrf_token %}
+        <div class="border p-4">
+            {{ form.as_p }}
+        </div>
+      <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+  </div>
+
+{% endblock %}

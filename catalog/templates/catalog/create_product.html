@@ -1,0 +1,33 @@
+{% extends 'catalog/base.html' %}
+
+{% load my_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center">
+     <h1 class="mb-5">Создание продукта</h1>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="border p-4">
+                    <div class="text-center">
+                        <h2 class="mb-5">Параметры продукта</h2>
+                    </div>
+                    {{ form.as_p }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="border p-4">
+                    <div class="text-center">
+                        <h2 class="mb-5">Версия продукта</h2>
+                    </div>
+                    {{ version_form.as_p }}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+</div>
+{% endblock %}
