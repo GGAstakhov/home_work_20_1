@@ -1,3 +1,5 @@
+# Импорт необходимых модулей
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from catalog.forms import ProductForm, CategoryForm, ProductVersionForm
@@ -52,7 +54,7 @@ class ProductsListView(ListView):
         ))
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'create_product.html'
@@ -65,6 +67,10 @@ class ProductCreateView(CreateView):
 
     def form_valid(self, form):
         # Проверка валидности формы
+        self.object = form.save(commit=False)
+        if self.request.user.is_authenticated:
+            self.object.owner = self.request.user
+        self.object.save()
         product = form.save(commit=False)
         product.name = form.cleaned_data['name']
         product.save()
@@ -89,7 +95,7 @@ class ProductDeleteView(DeleteView):
     success_url = reverse_lazy('product_list')
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'create_category.html'

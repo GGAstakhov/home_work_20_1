@@ -1,0 +1,12 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <label for="verification_code">Код верификации:</label>
+    <input type="text" name="verification_code" id="verification_code">
+    <button type="submit" class="btn btn-outline-success">Подтвердить</button>
+  </form>
+  {% if error_message %}
+    <p>{{ error_message }}</p>
+  {% endif %}
+{% endblock %}

@@ -206,3 +206,4 @@ cython_debug/
 #.idea/
 src/database.ini
 profile
+/venv/

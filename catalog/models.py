@@ -1,7 +1,9 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
 
-NULLABLE = {'blank': True, 'null': True}
+from src.constants import NULLABLE
+from users.models import User
 
 
 class Product(models.Model):
@@ -12,6 +14,15 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена покупки')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     date_modified = models.DateTimeField(auto_now=True, verbose_name='Последняя измененная дата')
+
+    # Поле для хранения пользователя, который создал продукт
+    owner = models.ForeignKey(User, on_delete=models.PROTECT, **NULLABLE)
+
+    # def save(self, *args, **kwargs):
+    #     if self.pk is None:  # Проверка, что модель создается (а не обновляется)
+    #         self.owner = kwargs.pop('request').user  # Получаем пользователя из запроса
+    #
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.name}'
