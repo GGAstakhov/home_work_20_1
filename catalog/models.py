@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
-
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 from src.constants import NULLABLE
 from users.models import User
 
@@ -17,12 +18,7 @@ class Product(models.Model):
 
     # Поле для хранения пользователя, который создал продукт
     owner = models.ForeignKey(User, on_delete=models.PROTECT, **NULLABLE)
-
-    # def save(self, *args, **kwargs):
-    #     if self.pk is None:  # Проверка, что модель создается (а не обновляется)
-    #         self.owner = kwargs.pop('request').user  # Получаем пользователя из запроса
-    #
-    #     super().save(*args, **kwargs)
+    is_published = models.BooleanField(default=False, verbose_name='признак публикации', **NULLABLE)
 
     def __str__(self):
         return f'{self.name}'

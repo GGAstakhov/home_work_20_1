@@ -7,7 +7,7 @@ from catalog.models import Product, Category, Version
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'image', 'category', 'price']
+        fields = ['name', 'description', 'image', 'category', 'price', 'is_published']
 
     def clean(self):
         cleaned_data = super().clean()

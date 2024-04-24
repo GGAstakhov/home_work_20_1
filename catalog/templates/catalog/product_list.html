@@ -1,33 +1,36 @@
 {% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
-
     <a href="{% url 'catalog:create_product' %}" class="btn btn-primary">Создать продукт</a>
 <div class="row text-center">
     {% for product in products %}
-    <div class="col-md-4">
-        <div class="card mb-4 box-shadow">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">{{ product.name|title }}</h4>
+       {% if product.is_published or is_moderator %}
+            <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">{{ product.name|title }}</h4>
+                    </div>
+                    <img class="card-img-top"
+                            src="{{ product.image|media }}"
+                         alt="Card image cap">
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{ product.price }} р.</h1>
+                        <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                            <li>- {{ product.description|slice:":100" }}</li>
+                        </ul>
+                        {% if product.active_version %}
+                            <p>Активная версия: {{ product.active_version }}</p>
+                        {% else %}
+                            <p>Товар отсутствует</p>
+                        {% endif %}
+                        {% if product.owner == request.user or is_moderator %}
+                            <a href="{% url 'catalog:update_product' product.pk %}" class="btn btn-primary">Редактировать</a>
+                            <a href="{% url 'catalog:delete_product' product.pk %}" class="btn btn-danger">Удалить</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <img class="card-img-top"
-                    src="{{ product.image|media }}"
-                 alt="Card image cap">
-            <div class="card-body">
-                <h1 class="card-title pricing-card-title">{{ product.price }} р.</h1>
-                <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                    <li>- {{ product.description|slice:":100" }}</li>
-                </ul>
-                {% if product.active_version %}
-                    <p>Активная версия: {{ product.active_version }}</p>
-                {% else %}
-                    <p>Товар отсутствует</p>
-                {% endif %}
-                <button type="button" class="btn btn-lg btn-block btn-outline-primary">Просмотр</button>
-            </div>
-        </div>
-    </div>
+        {% endif %}
     {% endfor %}
 </div>
-
 {% endblock %}

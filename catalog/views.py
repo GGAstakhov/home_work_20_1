@@ -1,10 +1,12 @@
 # Импорт необходимых модулей
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
+from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from catalog.forms import ProductForm, CategoryForm, ProductVersionForm
 from django.urls import reverse_lazy
 from django.shortcuts import reverse
+from django import forms
 from .models import Product, Version, Category
 from django.db.models import Case, When, CharField
 
@@ -26,18 +28,21 @@ class IndexView(TemplateView):
 
 
 # Страница с контактными данными
-def contacts(request):
-    if request.method == 'POST':
+class ContactsView(View):
+    def get(self, request):
+        return render(request, 'catalog/contacts.html')
+
+    def post(self, request):
         # Получение данных из запроса
         name = request.POST.get('name')
         email = request.POST.get('email')
         message = request.POST.get('message')
         print(f'name: {name}, email: {email}, message: {message}')
-    return render(request, 'catalog/contacts.html')
+        return render(request, 'catalog/contacts.html')
 
 
 # Страница с продуктами по выбранным категориям
-class ProductsListView(ListView):
+class ProductListView(ListView):
     model = Product
     template_name = 'product_list.html'
     context_object_name = 'products'
@@ -52,6 +57,11 @@ class ProductsListView(ListView):
             default=None,
             output_field=CharField()
         ))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_moderator'] = self.request.user.groups.filter(name='Модератор').exists()
+        return context
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -79,20 +89,48 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
             version = version_form.save(commit=False)
             version.product = product
             version.save()
-        return redirect(reverse('catalog:product_list', kwargs={'pk': product.pk}))
+        return redirect(reverse('catalog:product_list', kwargs={'pk': form.cleaned_data['category'].pk}))
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.groups.filter(name='Модератор').exists():
+            # Скрыть поле публикации, если ты не модератор
+            form.fields['is_published'].widget = forms.HiddenInput()
+        return form
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'update_product.html'
-    success_url = reverse_lazy('product_list')
+
+    def test_func(self):
+        product = self.get_object()
+        return self.request.user == product.owner or self.request.user.groups.filter(name='Модератор').exists()
+
+    def get_success_url(self):
+        product = self.get_object()
+        return reverse('catalog:product_list', kwargs={'pk': product.category.pk})
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.groups.filter(name='Модератор').exists():
+            # Скрыть поле публикации, если ты не модератор
+            form.fields['is_published'].widget = forms.HiddenInput()
+        return form
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(UserPassesTestMixin, DeleteView):
     model = Product
     template_name = 'delete_product.html'
-    success_url = reverse_lazy('product_list')
+
+    def get_success_url(self):
+        product = self.get_object()
+        return reverse('catalog:product_list', kwargs={'pk': product.category.pk})
+
+    def test_func(self):
+        product = self.get_object()
+        return self.request.user == product.owner or self.request.user.groups.filter(name='Модератор').exists()
 
 
 class CategoryCreateView(LoginRequiredMixin, CreateView):
