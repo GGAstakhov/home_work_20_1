@@ -7,7 +7,7 @@ from catalog.forms import ProductForm, CategoryForm, ProductVersionForm
 from django.urls import reverse_lazy
 from django.shortcuts import reverse
 from django import forms
-from .models import Product, Version, Category
+from catalog.models import Product, Version, Category
 from django.db.models import Case, When, CharField
 
 
