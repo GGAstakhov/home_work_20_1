@@ -51,7 +51,7 @@ class ProductListView(ListView):
         # Получение всех продуктов по выбранной категории
         queryset = super().get_queryset()
         queryset = queryset.filter(category=self.kwargs.get('pk'))
-        active_versions = Version.objects.filter(is_active=True)
+        active_version = Version.objects.filter(is_active=True)
         return queryset.prefetch_related('version_set').annotate(active_version=Case(
             When(version__is_active=True, then='version__name'),
             default=None,

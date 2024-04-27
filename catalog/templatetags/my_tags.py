@@ -7,6 +7,6 @@ register = template.Library()
 @register.filter()
 def media(value):
     if value:
-        return f'/{value}/'
+        return f'/media/{value}/'
 
     return f'#'
