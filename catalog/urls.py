@@ -1,6 +1,7 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 from catalog.apps import CatalogConfig
-from catalog.views import ContactsView, IndexView, ProductListView, ProductCreateView, ProductUpdateView, CategoryCreateView, ProductDeleteView
+from catalog.views import ContactsView, IndexView, ProductListView, ProductCreateView, ProductUpdateView, CategoryCreateView, ProductDeleteView, ProductDetailView
 
 # Конфигурационное имя приложения
 app_name = CatalogConfig.name
@@ -15,4 +16,6 @@ urlpatterns = [
     path('products/delete/<int:pk>/', ProductDeleteView.as_view(), name='delete_product'),
 
     path('category/create/', CategoryCreateView.as_view(), name='create_category'),
+    # Просмотр товара
+    path('product/<int:pk>/', cache_page(60)(ProductDetailView.as_view()), name='product_detail'),
 ]

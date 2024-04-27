@@ -4,11 +4,11 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from catalog.forms import ProductForm, CategoryForm, ProductVersionForm
-from django.urls import reverse_lazy
 from django.shortcuts import reverse
 from django import forms
 from catalog.models import Product, Version, Category
 from django.db.models import Case, When, CharField
+from .services import get_cache_object_list
 
 
 # Стартовая страница приложения Catalog
@@ -23,7 +23,7 @@ class IndexView(TemplateView):
         # Получение данных контекста
         context_data = super().get_context_data(**kwargs)
         # Получение списка всех категорий
-        context_data['object_list'] = Category.objects.all()
+        context_data['object_list'] = get_cache_object_list()
         return context_data
 
 

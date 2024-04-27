@@ -27,6 +27,7 @@
                             <a href="{% url 'catalog:update_product' product.pk %}" class="btn btn-primary">Редактировать</a>
                             <a href="{% url 'catalog:delete_product' product.pk %}" class="btn btn-danger">Удалить</a>
                         {% endif %}
+                    <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-outline-primary">Просмотр</a>
                     </div>
                 </div>
             </div>
